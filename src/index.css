@@ -7,6 +7,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+:root {
+  --mdc-theme-primary: rgb(0, 211, 211);
+  --mdc-theme-secondary: orange;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
