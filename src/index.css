@@ -8,8 +8,8 @@ body {
 }
 
 :root {
-  --mdc-theme-primary: rgb(0, 211, 211);
-  --mdc-theme-secondary: orange;
+  --mdc-theme-primary: #41337A;
+  --mdc-theme-secondary: #C2EfEB;
 }
 
 code {

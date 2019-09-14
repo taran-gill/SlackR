@@ -1,11 +1,15 @@
 import React from 'react';
 import './App.css';
 
-import NavBar from './components/NavBar';
+import Title from './components/Title';
+import ResultGrid from './components/ResultGrid';
 
 function App() {
   return (
-    <NavBar />
+    <>
+      <Title />
+      <ResultGrid />
+    </>
   );
 }
 
