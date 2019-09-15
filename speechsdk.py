@@ -58,38 +58,42 @@ client = firestore.Client()
 import base64
 
 # Converts strings added to /messages/{pushId}/original to uppercase
-def make_speech_data(data, context):
-    print(context.resource)
-    path_parts = context.resource.split('/documents/')[1].split('/')
-    collection_path = path_parts[0]
-    document_path = '/'.join(path_parts[1:])
+# def make_speech_data(data, context):
+#     print(context.resource)
+#     path_parts = context.resource.split('/documents/')[1].split('/')
+#     collection_path = path_parts[0]
+#     document_path = '/'.join(path_parts[1:])
 
-    affected_doc = client.collection(collection_path).document(document_path)
+#     affected_doc = client.collection(collection_path).document(document_path)
 
-    cur_value = data["blob"]
+#     cur_value = data["blob"]
 
-    cur_value = base64.b64decode(cur_value)
+#     cur_value = base64.b64decode(cur_value)
 
-    speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
-    audio_config = speechsdk.audio.AudioConfig(filename=cur_value)
-    # Creates a speech recognizer using a file as audio input.
-    # The default language is "en-us".
-    speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
+#     speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
+#     audio_config = speechsdk.audio.AudioConfig(filename=cur_value)
+#     # Creates a speech recognizer using a file as audio input.
+#     # The default language is "en-us".
+#     speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
 
-    result = speech_recognizer.recognize_once()
+#     result = speech_recognizer.recognize_once()
+result = str(result)
+result = summarize(result,ratio = 0.5)
+#result = result.text()
 
-    print(result)
+# if result.reason == speechsdk.ResultReason.RecognizedSpeech:
+#     print("Recognized: {}".format(result.text))
+# elif result.reason == speechsdk.ResultReason.NoMatch:
+#     print("No speech could be recognized: {}".format(result.no_match_details))
+# elif result.reason == speechsdk.ResultReason.Canceled:
+#     cancellation_details = result.cancellation_details
+#     print("Speech Recognition canceled: {}".format(cancellation_details.reason))
+# if cancellation_details.reason == speechsdk.CancellationReason.Error:
+#     print("Error details: {}".format(cancellation_details.error_details))
 
-    if result.reason == speechsdk.ResultReason.RecognizedSpeech:
-        print("Recognized: {}".format(result.text))
-    elif result.reason == speechsdk.ResultReason.NoMatch:
-        print("No speech could be recognized: {}".format(result.no_match_details))
-    elif result.reason == speechsdk.ResultReason.Canceled:
-        cancellation_details = result.cancellation_details
-        print("Speech Recognition canceled: {}".format(cancellation_details.reason))
-    if cancellation_details.reason == speechsdk.CancellationReason.Error:
-        print("Error details: {}".format(cancellation_details.error_details))
 
-    affected_doc.set({
-        u'blob': cur_value
-    })
+affected_doc = db.collection("summaries").document("aaaahhh")
+affected_doc.set({
+    u'summary': result
+})
+print(result)
