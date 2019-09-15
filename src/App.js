@@ -6,9 +6,12 @@ import NavBar from './components/NavBar';
 import Landing from './components/Landing';
 import Summary from './components/Summary';
 
+import './App.css';
+
 function App() {
   return (
     <>
+      <div id='top'></div>
       <NavBar />
       <Router>
           <Route
@@ -18,6 +21,7 @@ function App() {
           />
       </Router>
 	  <Summary />
+    <a href="#top" className="backtoTop">Back to Top</a>
     </>
   );
 }
