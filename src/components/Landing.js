@@ -1,5 +1,4 @@
 import React from 'react';
-import firebase from '../firebase.js';
 
 import AudioManager from '../audio/audio';
 

@@ -1,4 +1,5 @@
 import { throttle } from 'lodash'
+import firebase from '../firebase';
 
 class AudioManager {
     mediaRecorder = null;
@@ -37,6 +38,7 @@ class AudioManager {
             const arrayBuffer = await self.audioBlob.arrayBuffer();
             const audioBlob = new Buffer(arrayBuffer, 'binary' ).toString('base64');
             //firebase.firestore().collection('audio_blobs').doc('blob').set({ blob: audioBlob });
+
         }
 
         self.mediaRecorder.start();
