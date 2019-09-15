@@ -44,38 +44,38 @@ class AudioManager {
     }
 
     _setupVolume(stream) {
-        const getAverageVolume = array => {
-            const length = array.length;
-            let values = 0;
-            let i = 0;
+        // const getAverageVolume = array => {
+        //     const length = array.length;
+        //     let values = 0;
+        //     let i = 0;
         
-            for (; i < length; i++) {
-                values += array[i];
-            }
+        //     for (; i < length; i++) {
+        //         values += array[i];
+        //     }
         
-            return values / length;
-        }
+        //     return values / length;
+        // }
 
-        const audioContext = new AudioContext();
-        const input = audioContext.createMediaStreamSource(stream);
-        const analyser = audioContext.createAnalyser();
-        const scriptProcessor = audioContext.createScriptProcessor();
+        // const audioContext = new AudioContext();
+        // const input = audioContext.createMediaStreamSource(stream);
+        // const analyser = audioContext.createAnalyser();
+        // const scriptProcessor = audioContext.createScriptProcessor();
     
-        // Some analyser setup
-        analyser.smoothingTimeConstant = 0.3;
-        analyser.fftSize = 1024;
+        // // Some analyser setup
+        // analyser.smoothingTimeConstant = 0.3;
+        // analyser.fftSize = 1024;
         
-        input.connect(analyser);
-        analyser.connect(scriptProcessor);
-        scriptProcessor.connect(audioContext.destination);
+        // input.connect(analyser);
+        // analyser.connect(scriptProcessor);
+        // scriptProcessor.connect(audioContext.destination);
 
-        const bars = [];
+        // const bars = [];
 
-        scriptProcessor.onaudioprocess = audioProcessingEvent => {
-            const tempArray = new Uint8Array(analyser.frequencyBinCount);
+        // scriptProcessor.onaudioprocess = audioProcessingEvent => {
+        //     const tempArray = new Uint8Array(analyser.frequencyBinCount);
         
-            analyser.getByteFrequencyData(tempArray);
-            bars.push(getAverageVolume(tempArray));
+        //     analyser.getByteFrequencyData(tempArray);
+        //     bars.push(getAverageVolume(tempArray));
     }
 
     async remove() {
