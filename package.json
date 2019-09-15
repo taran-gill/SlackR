@@ -2,6 +2,7 @@
   "name": "haulsmart",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "debounce": "^1.2.0",
     "firebase": "6.6.1",
