@@ -10,7 +10,38 @@
     margin-right: 20%;
     margin-top: 5%;
     margin-bottom: 10%;
-    border: 1px solid black;
+    border: 10px solid rgb(230, 230, 230);
     overflow: scroll;
     height: 600px;
+}
+
+.verticleBlock{
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 5%;
+    margin-bottom: 10%;
+    text-align: middle;
+}
+
+
+button{
+    border: 0.5px solid grey;
+    background-color: white;
+    font-family: "Quicksand";
+    transition: 0.3s;
+    width: 100%;
+}
+
+button:hover{
+    transition: 0.3s;
+    background-color: rgb(192, 192, 192);
+}
+
+input{
+    width: 100%;
+}
+
+.HI{
+    font-family: "Quicksand";
+    text-align: center;
 }
