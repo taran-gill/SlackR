@@ -1,5 +1,23 @@
 .landing {
     text-align: center;
-
-    margin-top: 20%;
+    height: 100%;
+    margin-top: 14%;
+    margin-bottom: 18%;
+    margin-left: 20%;
+    margin-right: 20%;
+    font-family:  'Quicksand';
+    /*margin-bottom: 50%;*/
+}
+h4 {
+    font-size: 2.4em;
+}
+h3 {
+    font-size: 3.5em;
+    color: rgba(54, 39, 223, 0.9);
+    margin-bottom: 1.2em;
+}
+p {
+    font-size: 1.4em;
+    line-height: 0.5em;
+    color: rgba(4, 4, 97, 0.9);
 }
