@@ -11,10 +11,6 @@ class Landing extends React.Component {
         this.AudioManager.initialize();
     }
 
-    componentWillUnmount() {
-        this.AudioManager.remove();
-    }
-
     render() {
         return (
             <div className='landing'>

@@ -1,5 +1,7 @@
+import { throttle } from 'lodash'
+
 class AudioManager {
-    interval = null;
+    mediaRecorder = null;
 
     audioBlob = null;
     audioChunks = [];
@@ -7,15 +9,15 @@ class AudioManager {
     async initialize() {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-        const mediaRecorder = new MediaRecorder(stream);
+        this.mediaRecorder = new MediaRecorder(stream);
 
-        mediaRecorder.addEventListener("dataavailable", event => {
+        this.mediaRecorder.addEventListener("dataavailable", event => {
             this.audioChunks.push(event.data);
         });
 
-        mediaRecorder.start();
+        this.mediaRecorder.start();
 
-        mediaRecorder.addEventListener("stop", () => {
+        this.mediaRecorder.addEventListener("stop", () => {
             this.audioBlob = new Blob(this.audioChunks);
 
             const audioUrl = URL.createObjectURL(this.audioBlob);
@@ -23,63 +25,70 @@ class AudioManager {
             audio.play();
         });
 
-        this._setupUpload(mediaRecorder);
         this._setupVolume(stream);
     }
 
-    _setupUpload(mediaRecorder) {
-        this.interval = setInterval(async () => {
-            mediaRecorder.stop();
+    _upload = throttle(async (self) => {
+        self.mediaRecorder.stop();
 
-            this.audioChunks = [];
+        self.audioChunks = [];
 
-            if (this.audioBlob !== null) {
-                const arrayBuffer = await this.audioBlob.arrayBuffer();
-                const audioBlob = new Buffer(arrayBuffer, 'binary' ).toString('base64');
-                // firebase.firestore().collection('audio_blobs').doc('blob').set({ blob: audioBlob });
-            }
+        if (self.audioBlob !== null) {
+            const arrayBuffer = await self.audioBlob.arrayBuffer();
+            const audioBlob = new Buffer(arrayBuffer, 'binary' ).toString('base64');
+            // firebase.firestore().collection('audio_blobs').doc('blob').set({ blob: audioBlob });
+        }
 
-            mediaRecorder.start();
-        }, 3000);
-    }
+        self.mediaRecorder.start();
+        
+    }, 3000, { 'leading': true, 'trailing': false });
 
     _setupVolume(stream) {
-        // const getAverageVolume = array => {
-        //     const length = array.length;
-        //     let values = 0;
-        //     let i = 0;
+        const getAverageVolume = array => {
+            const length = array.length;
+            let values = 0;
+            let i = 0;
         
-        //     for (; i < length; i++) {
-        //         values += array[i];
-        //     }
+            for (; i < length; i++) {
+                values += array[i];
+            }
         
-        //     return values / length;
-        // }
+            return values / length;
+        }
 
-        // const audioContext = new AudioContext();
-        // const input = audioContext.createMediaStreamSource(stream);
-        // const analyser = audioContext.createAnalyser();
-        // const scriptProcessor = audioContext.createScriptProcessor();
+        const audioContext = new AudioContext();
+        const input = audioContext.createMediaStreamSource(stream);
+        const analyser = audioContext.createAnalyser();
+        const scriptProcessor = audioContext.createScriptProcessor();
     
-        // // Some analyser setup
-        // analyser.smoothingTimeConstant = 0.3;
-        // analyser.fftSize = 1024;
+        // Some analyser setup
+        analyser.smoothingTimeConstant = 0.3;
+        analyser.fftSize = 1024;
         
-        // input.connect(analyser);
-        // analyser.connect(scriptProcessor);
-        // scriptProcessor.connect(audioContext.destination);
+        input.connect(analyser);
+        analyser.connect(scriptProcessor);
+        scriptProcessor.connect(audioContext.destination);
 
-        // const bars = [];
+        let bars = [];
 
-        // scriptProcessor.onaudioprocess = audioProcessingEvent => {
-        //     const tempArray = new Uint8Array(analyser.frequencyBinCount);
+        scriptProcessor.onaudioprocess = audioProcessingEvent => {
+            const tempArray = new Uint8Array(analyser.frequencyBinCount);
         
-        //     analyser.getByteFrequencyData(tempArray);
-        //     bars.push(getAverageVolume(tempArray));
-    }
+            analyser.getByteFrequencyData(tempArray);
 
-    async remove() {
-        clearInterval(this.interval);
+            const volume = getAverageVolume(tempArray);
+
+            if (bars.length > 50) {
+                const average = bars.reduce((a, b) => a + b, 0) / bars.length;
+                bars = bars.slice(1);
+                console.log(average, bars[bars.length - 1])
+                if (volume < average) {
+                    this._upload(this);
+                }
+            }
+
+            bars.push(volume);
+        }
     }
 }
 
