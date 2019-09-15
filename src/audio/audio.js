@@ -36,7 +36,7 @@ class AudioManager {
         if (self.audioBlob !== null) {
             const arrayBuffer = await self.audioBlob.arrayBuffer();
             const audioBlob = new Buffer(arrayBuffer, 'binary' ).toString('base64');
-            // firebase.firestore().collection('audio_blobs').doc('blob').set({ blob: audioBlob });
+            //firebase.firestore().collection('audio_blobs').doc('blob').set({ blob: audioBlob });
         }
 
         self.mediaRecorder.start();

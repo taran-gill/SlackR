@@ -6,6 +6,8 @@ import NavBar from './components/NavBar';
 import Landing from './components/Landing';
 import Summary from './components/Summary';
 
+import firebase from './firebase'
+
 import './App.css';
 
 function App() {
@@ -20,7 +22,7 @@ function App() {
               component={Landing}
           />
       </Router>
-	  <Summary />
+	  <Summary firebase={firebase}/>
     <a href="#top" className="backtoTop">Back to Top</a>
     </>
   );
